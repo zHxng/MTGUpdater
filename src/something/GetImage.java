@@ -9,7 +9,8 @@ import java.net.URL;
 
 public class GetImage {
 
-    public static void getImage(String l, String p, String lo) throws Exception {
+    String card;
+    public void getImage(String l, String p, String lo) throws Exception {
         try {
             JSONParser parser = new JSONParser();
             boolean not = true;
@@ -29,7 +30,7 @@ public class GetImage {
 
                 i++;
 
-                System.out.println(p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+                card = (p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
             }
 
         } catch (Exception e) {
@@ -52,6 +53,10 @@ public class GetImage {
 
         is.close();
         os.close();
+    }
+
+    public String cardName(){
+        return card;
     }
 
 }
