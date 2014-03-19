@@ -13,6 +13,7 @@ public class ImageFetcher extends JFrame {
     JButton back;
     JButton enter;
     JButton fle;
+    JButton stop;
     JTextField set;
     JTextField abrev;
     JTextField loc;
@@ -86,6 +87,12 @@ public class ImageFetcher extends JFrame {
         gc.gridy = 4;
         add(enter, gc);
 
+        stop = new JButton("Stop");
+        gc.gridx = 10;
+        gc.gridy = 4;
+        gc.gridwidth = 10;
+        add(stop, gc);
+
         con = new JLabel("Current File: ");
         gc.gridx = 0;
         gc.gridy = 5;
@@ -135,12 +142,24 @@ public class ImageFetcher extends JFrame {
             }
         });
 
+        stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (running) {
+                    running = false;
+                    JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Not started!");
+                }
+            }
+        });
+
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (running) {
                     running = false;
-                    JOptionPane.showMessageDialog(null, "Downloading aborted!");
+                    JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
                 }
                 dispose();
                 new SetGUI();
@@ -166,7 +185,7 @@ public class ImageFetcher extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (running) {
                     running = false;
-                    JOptionPane.showMessageDialog(null, "Downloading aborted!");
+                    JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
                 }
                 chooser.showOpenDialog(null);
             }
@@ -178,7 +197,7 @@ public class ImageFetcher extends JFrame {
     private void chooserHappened() {
         if (running) {
             running = false;
-            JOptionPane.showMessageDialog(null, "Downloading aborted!");
+            JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
         }
 
         File file = chooser.getSelectedFile();
@@ -192,7 +211,7 @@ public class ImageFetcher extends JFrame {
 
         if (running) {
             running = false;
-            JOptionPane.showMessageDialog(null, "Downloading aborted!");
+            JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
         }
 
         running = true;
