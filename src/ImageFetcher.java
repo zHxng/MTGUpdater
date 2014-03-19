@@ -1,11 +1,15 @@
-import something.GetImage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.net.URL;
 
-public class ImageFetcher extends JFrame{
+public class ImageFetcher extends JFrame {
 
     JButton back;
     JButton enter;
@@ -16,11 +20,10 @@ public class ImageFetcher extends JFrame{
     JLabel s;
     JLabel a;
     JLabel l;
-    JTextArea con;
+    JLabel con;
+    JFileChooser chooser;
 
     public ImageFetcher(JFrame prevGUI) {
-        GetImage myImage = new GetImage();
-
         setVisible(true);
         setMinimumSize(new Dimension(300, 500));
         setMaximumSize(new Dimension(300, 500));
@@ -53,7 +56,7 @@ public class ImageFetcher extends JFrame{
         add(l, gc);
 
         fle = new JButton("...");
-        gc.gridx = 2;
+        gc.gridx = 10;
         gc.gridy = 2;
         add(fle, gc);
 
@@ -85,10 +88,13 @@ public class ImageFetcher extends JFrame{
         gc.gridy = 4;
         add(enter, gc);
 
-        con = new JTextArea();
-        gc.gridx = 2;
+        con = new JLabel("Current File: ");
+        gc.gridx = 0;
         gc.gridy = 5;
         add(con, gc);
+
+        chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         back.addActionListener(new ActionListener() {
             @Override
@@ -105,28 +111,89 @@ public class ImageFetcher extends JFrame{
             }
         });
 
+        chooser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chooserHappened();
+            }
+        });
+
         fle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //insert file thing
+                chooser.showOpenDialog(null);
             }
         });
 
         pack();
     }
 
-    private void thingHappened() {
-        GetImage myImage = new GetImage();
+    private void chooserHappened() {
+        File file = chooser.getSelectedFile();
+        loc.setText(file.getPath());
+    }
 
+    private void thingHappened() {
         String setString = "http://api.mtgapi.com/v1/card/set/" + set.getText();
         String abrevString = abrev.getText();
         String saveTo = loc.getText();
 
-        try {
-            myImage.getImage(setString.replaceAll(" ", "%20"), abrevString, saveTo);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
+        getImage(setString.replaceAll(" ", "%20"), abrevString, saveTo);
+    }
+
+    public void getImage(final String l, final String p, final String lo) {
+        new Runnable() {
+
+            @Override
+            public void run() {
+                int i = 1;
+                try {
+                    JSONParser parser = new JSONParser();
+                    while (true) {
+                        URL url = new URL(l);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+                        JSONArray array = (JSONArray) parser.parse(reader);
+                        JSONObject object = (JSONObject) array.get(i);
+                        String id = object.get("id").toString();
+                        URL idURL = new URL("http://api.mtgapi.com/v1/card/id/" + id);
+                        BufferedReader reader1 = new BufferedReader(new InputStreamReader(idURL.openStream()));
+                        JSONArray array1 = (JSONArray) parser.parse(reader1);
+                        JSONObject object1 = (JSONObject) array1.get(0);
+                        String imageURL = object1.get("image").toString();
+                        saveImage(imageURL, lo + "\\" + p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+
+                        i++;
+
+                        con.setText("Current File: " + p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (e.getCause() == new IndexOutOfBoundsException().getCause()) {
+                        JOptionPane.showMessageDialog(null, "Finished Downloading! :D");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
+                    }
+                }
+            }
+
+        }.run();
+    }
+
+    public void saveImage(String imageUrl, String destinationFile) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream is = url.openStream();
+        OutputStream os = new FileOutputStream(destinationFile);
+
+        byte[] b = new byte[2048];
+        int length;
+
+        while ((length = is.read(b)) != -1) {
+            os.write(b, 0, length);
         }
+
+        is.close();
+        os.close();
     }
 
 }
