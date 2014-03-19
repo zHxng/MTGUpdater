@@ -21,10 +21,10 @@ public class ImageFetcher extends JFrame{
         GetImage myImage = new GetImage();
 
         setVisible(true);
-        setMinimumSize(new Dimension(700,700));
-        setMaximumSize(new Dimension(700,700));
-        setSize((new Dimension(700,700)));
-        setPreferredSize((new Dimension(700,700)));
+        setMinimumSize(new Dimension(300, 500));
+        setMaximumSize(new Dimension(300, 500));
+        setSize(new Dimension(300, 500));
+        setPreferredSize(new Dimension(300, 500));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocation(prevGUI.getX(), prevGUI.getY());
         setTitle("MTGUpdater");
@@ -81,8 +81,6 @@ public class ImageFetcher extends JFrame{
         gc.gridx = 2;
         gc.gridy = 5;
         add(con, gc);
-
-        con.append(myImage.cardName());
 
         back.addActionListener(new ActionListener() {
             @Override
