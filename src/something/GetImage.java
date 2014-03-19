@@ -1,3 +1,5 @@
+package something;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,7 +15,7 @@ public class GetImage {
         try {
             JSONParser parser = new JSONParser();
             boolean not = true;
-            int i = 0;
+            int i = 1;
             while (not) {
                 URL url = new URL(l);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
