@@ -1,3 +1,5 @@
+https://drone.io/github.com/donkayy/MTGUpdater
+
 MTGUpdater for http://unclebanscards.com/
 Fetch Card Images and Prices!
 
