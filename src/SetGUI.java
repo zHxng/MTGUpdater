@@ -59,6 +59,14 @@ public class SetGUI extends JFrame {
             }
         });
 
+        price.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                toPrice();
+            }
+        });
+
         close.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,8 +77,12 @@ public class SetGUI extends JFrame {
         pack();
     }
 
-    public void toImage() {
+    private void toImage() {
         new ImageFetcher(this).requestFocus();
+    }
+
+    private void toPrice(){
+        new PriceFetcher(this).requestFocus();
     }
 
 }
