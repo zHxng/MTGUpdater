@@ -28,17 +28,17 @@ public class ImageFetcher extends JFrame{
         GridBagConstraints gc = new GridBagConstraints();
 
         s = new JLabel("Set: ");
-        gc.gridx = -5;
+        gc.gridx = 5;
         gc.gridy = 0;
         add(s, gc);
 
         a = new JLabel("Abrev: ");
-        gc.gridx = -5;
+        gc.gridx = 5;
         gc.gridy = 1;
         add(a, gc);
 
         l = new JLabel("Save To: ");
-        gc.gridx = -5;
+        gc.gridx = 5;
         gc.gridy = 2;
         add(l, gc);
 

@@ -89,8 +89,11 @@
       <file leaf-file-name="SetGUI.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="27" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
-              <folding />
+            <state line="11" column="8" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+              <folding>
+                <element signature="e#1393#1572#0" expanded="true" />
+                <element signature="e#1561#1562#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -98,8 +101,10 @@
       <file leaf-file-name="ImageFetcher.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="21" selection-start="1545" selection-end="1545" vertical-scroll-proportion="0.5509434" vertical-offset="779" max-vertical-offset="1377">
-              <folding />
+            <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="-1.6301887" vertical-offset="864" max-vertical-offset="1394">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -121,9 +126,9 @@
         <option value="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         <option value="$PROJECT_DIR$/src/setGUI.java" />
         <option value="$PROJECT_DIR$/src/getImage.java" />
-        <option value="$PROJECT_DIR$/src/SetGUI.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/GetImage.java" />
+        <option value="$PROJECT_DIR$/src/SetGUI.java" />
         <option value="$PROJECT_DIR$/src/ImageFetcher.java" />
       </list>
     </option>
@@ -514,7 +519,7 @@
       <workItem from="1395187907637" duration="665000" />
       <workItem from="1395188623367" duration="1291000" />
       <workItem from="1395190055594" duration="996000" />
-      <workItem from="1395191089427" duration="455000" />
+      <workItem from="1395191089427" duration="879000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/.name&#10;#&#9;new file:   .idea/artifacts/CardPuller.xml&#10;#&#9;new file:   .idea/compiler.xml&#10;#&#9;new file:   .idea/copyright/profiles_settings.xml&#10;#&#9;new file:   .idea/dictionaries/Alan.xml&#10;#&#9;new file:   .idea/encodings.xml&#10;#&#9;new file:   .idea/libraries/com_googlecode_json_simple_json_simple_1_1_1.xml&#10;#&#9;new file:   .idea/misc.xml&#10;#&#9;new file:   .idea/modules.xml&#10;#&#9;new file:   .idea/scopes/scope_settings.xml&#10;#&#9;new file:   .idea/uiDesigner.xml&#10;#&#9;new file:   .idea/vcs.xml&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#9;new file:   ImageSpammer.iml&#10;#&#9;new file:   META-INF/MANIFEST.MF&#10;#&#9;new file:   out/production/ImageSpammer/Main.class&#10;#&#9;new file:   out/production/ImageSpammer/getImage.class&#10;#&#9;new file:   out/production/ImageSpammer/setGUI.class&#10;#&#9;new file:   src/Main.java&#10;#&#9;new file:   src/getImage.java&#10;#&#9;new file:   src/setGUI.java&#10;#&#10;# Changes not staged for commit:&#10;#&#9;modified:   .idea/vcs.xml&#10;#&#9;modified:   .idea/workspace.xml&#10;#&#10;">
       <created>1395184990800</created>
@@ -544,11 +549,15 @@
       <created>1395189299980</created>
       <updated>1395189299980</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="GridBagLayout is retarted">
+      <created>1395191559653</created>
+      <updated>1395191559653</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21172000" />
+    <option name="totallyTimeSpent" value="21596000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -620,7 +629,8 @@
     <MESSAGE value="request" />
     <MESSAGE value="Gui positioning" />
     <MESSAGE value="fixed something" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed something" />
+    <MESSAGE value="GridBagLayout is retarted" />
+    <option name="LAST_COMMIT_MESSAGE" value="GridBagLayout is retarted" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -681,14 +691,19 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="57" column="27" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="1156">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="25" selection-start="1352" selection-end="1352" vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="1377">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -709,14 +724,19 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="57" column="27" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="1156">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="62" selection-start="406" selection-end="406" vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="510">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -737,14 +757,19 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="47" column="13" selection-start="1402" selection-end="1402" vertical-scroll-proportion="0.0" vertical-offset="799" max-vertical-offset="1020">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="47" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -765,14 +790,19 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="0" selection-start="1019" selection-end="1019" vertical-scroll-proportion="0.0" vertical-offset="612" max-vertical-offset="969">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="43" selection-start="258" selection-end="258" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="442">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -793,7 +823,10 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="13" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="629">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -814,7 +847,10 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="32" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="289">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -835,7 +871,10 @@
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="32" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="289">
-          <folding />
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -877,15 +916,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="27" selection-start="1626" selection-end="1626" vertical-scroll-proportion="0.0" vertical-offset="744" max-vertical-offset="1105">
-          <folding />
+        <state line="11" column="8" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+          <folding>
+            <element signature="e#1393#1572#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="21" selection-start="1545" selection-end="1545" vertical-scroll-proportion="0.5509434" vertical-offset="779" max-vertical-offset="1377">
-          <folding />
+        <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="-1.6301887" vertical-offset="864" max-vertical-offset="1394">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
