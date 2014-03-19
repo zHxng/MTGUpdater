@@ -18,6 +18,8 @@ public class ImageFetcher extends JFrame{
     JTextArea con;
 
     public ImageFetcher(JFrame prevGUI) {
+        GetImage myImage = new GetImage();
+
         setVisible(true);
         setMinimumSize(new Dimension(700,700));
         setMaximumSize(new Dimension(700,700));
@@ -78,6 +80,9 @@ public class ImageFetcher extends JFrame{
         con = new JTextArea();
         gc.gridx = 2;
         gc.gridy = 5;
+        add(con, gc);
+
+        con.append(myImage.cardName());
 
         back.addActionListener(new ActionListener() {
             @Override
@@ -109,8 +114,6 @@ public class ImageFetcher extends JFrame{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
         }
-
-        con.append(myImage.cardName());
     }
 
 }
