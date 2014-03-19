@@ -22,6 +22,11 @@ public class SetGUI extends JFrame {
         }
         setVisible(true);
         setSize(700, 700);
+        setMinimumSize(new Dimension(700,700));
+        setMaximumSize(new Dimension(700,700));
+        setSize((new Dimension(700,700)));
+        setPreferredSize((new Dimension(700,700)));
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("MTGUpdater");
 
@@ -42,13 +47,16 @@ public class SetGUI extends JFrame {
         image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("here");
                 dispose();
-                new ImageFetcher().requestFocus();
+                toImage();
             }
         });
 
         pack();
+    }
+
+    public void toImage() {
+        new ImageFetcher(this).requestFocus();
     }
 
 }

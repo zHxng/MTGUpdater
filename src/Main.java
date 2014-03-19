@@ -3,10 +3,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        GetImage myImage = new GetImage();
         SetGUI myGUI = new SetGUI();
         //if(){
-        myImage.getImage(getLink(), getAbrev(), getLocation());
+        GetImage.getImage(getLink(), getAbrev(), getLocation());
         //}else{
 
         //}

@@ -9,7 +9,7 @@ public class ImageFetcher extends JFrame{
         setMaximumSize(new Dimension(700,700));
         setSize((new Dimension(700,700)));
         setPreferredSize((new Dimension(700,700)));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocation(prevGUI.getX(), prevGUI.getY());
         setTitle("MTGUpdater");
 
