@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d42e0d11-b792-472a-8938-3fe65202c64d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ImageFetcher.java" afterPath="$PROJECT_DIR$/src/ImageFetcher.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="abfe6ad2-c54f-4234-923d-09fb2821c31d" name="New changelist" comment="" />
@@ -68,10 +68,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="0" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+            <state line="7" column="10" selection-start="156" selection-end="156" vertical-scroll-proportion="0.2245283" vertical-offset="0" max-vertical-offset="530">
               <folding />
             </state>
           </provider>
@@ -98,10 +98,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImageFetcher.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ImageFetcher.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="36" selection-start="1002" selection-end="1002" vertical-scroll-proportion="0.6792453" vertical-offset="303" max-vertical-offset="1394">
+            <state line="28" column="0" selection-start="767" selection-end="767" vertical-scroll-proportion="0.0" vertical-offset="48" max-vertical-offset="1394">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -126,10 +126,10 @@
         <option value="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         <option value="$PROJECT_DIR$/src/setGUI.java" />
         <option value="$PROJECT_DIR$/src/getImage.java" />
-        <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/GetImage.java" />
         <option value="$PROJECT_DIR$/src/SetGUI.java" />
         <option value="$PROJECT_DIR$/src/ImageFetcher.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
@@ -519,7 +519,7 @@
       <workItem from="1395187907637" duration="665000" />
       <workItem from="1395188623367" duration="1291000" />
       <workItem from="1395190055594" duration="996000" />
-      <workItem from="1395191089427" duration="1060000" />
+      <workItem from="1395191089427" duration="1299000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/.name&#10;#&#9;new file:   .idea/artifacts/CardPuller.xml&#10;#&#9;new file:   .idea/compiler.xml&#10;#&#9;new file:   .idea/copyright/profiles_settings.xml&#10;#&#9;new file:   .idea/dictionaries/Alan.xml&#10;#&#9;new file:   .idea/encodings.xml&#10;#&#9;new file:   .idea/libraries/com_googlecode_json_simple_json_simple_1_1_1.xml&#10;#&#9;new file:   .idea/misc.xml&#10;#&#9;new file:   .idea/modules.xml&#10;#&#9;new file:   .idea/scopes/scope_settings.xml&#10;#&#9;new file:   .idea/uiDesigner.xml&#10;#&#9;new file:   .idea/vcs.xml&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#9;new file:   ImageSpammer.iml&#10;#&#9;new file:   META-INF/MANIFEST.MF&#10;#&#9;new file:   out/production/ImageSpammer/Main.class&#10;#&#9;new file:   out/production/ImageSpammer/getImage.class&#10;#&#9;new file:   out/production/ImageSpammer/setGUI.class&#10;#&#9;new file:   src/Main.java&#10;#&#9;new file:   src/getImage.java&#10;#&#9;new file:   src/setGUI.java&#10;#&#10;# Changes not staged for commit:&#10;#&#9;modified:   .idea/vcs.xml&#10;#&#9;modified:   .idea/workspace.xml&#10;#&#10;">
       <created>1395184990800</created>
@@ -557,11 +557,15 @@
       <created>1395191986771</created>
       <updated>1395191986771</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="somewhat fixed the stupid gridbaglayout&#10;&#10;OOPS FORGOT CAPS">
+      <created>1395192185494</created>
+      <updated>1395192185494</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21777000" />
+    <option name="totallyTimeSpent" value="22016000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -635,7 +639,8 @@
     <MESSAGE value="fixed something" />
     <MESSAGE value="GridBagLayout is retarted" />
     <MESSAGE value="WTF GridBagLayout&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="WTF GridBagLayout&#10;" />
+    <MESSAGE value="somewhat fixed the stupid gridbaglayout&#10;&#10;OOPS FORGOT CAPS" />
+    <option name="LAST_COMMIT_MESSAGE" value="somewhat fixed the stupid gridbaglayout&#10;&#10;OOPS FORGOT CAPS" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -905,20 +910,6 @@
         <state line="2" column="0" selection-start="15" selection-end="15" vertical-scroll-proportion="0.05483871" vertical-offset="0" max-vertical-offset="620" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GetImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="14" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="517" selection-end="517" vertical-scroll-proportion="0.0" vertical-offset="173" max-vertical-offset="816">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/SetGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="8" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
@@ -931,10 +922,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="36" selection-start="1002" selection-end="1002" vertical-scroll-proportion="0.6792453" vertical-offset="303" max-vertical-offset="1394">
+        <state line="28" column="0" selection-start="767" selection-end="767" vertical-scroll-proportion="0.0" vertical-offset="48" max-vertical-offset="1394">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GetImage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="14" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="10" selection-start="156" selection-end="156" vertical-scroll-proportion="0.2245283" vertical-offset="0" max-vertical-offset="530">
+          <folding />
         </state>
       </provider>
     </entry>
