@@ -5,9 +5,12 @@ public class ImageFetcher extends JFrame{
 
     public ImageFetcher() {
         setVisible(true);
-        setSize(700, 700);
+        setMinimumSize(new Dimension(700,700));
+        setMaximumSize(new Dimension(700,700));
+        setSize((new Dimension(700,700)));
+        setPreferredSize((new Dimension(700,700)));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("MTGUpdater: Image Fetcher");
+        setTitle("MTGUpdater");
 
         GridBagLayout gl = new GridBagLayout();
         setLayout(gl);
