@@ -38,8 +38,6 @@ public class ImageFetcher extends JFrame {
 
         GridBagConstraints gc = new GridBagConstraints();
 
-        final JFileChooser fc = new JFileChooser();
-
         s = new JLabel("Set: ");
         gc.gridx = 0;
         gc.gridy = 0;
@@ -91,7 +89,7 @@ public class ImageFetcher extends JFrame {
         con = new JLabel("Current File: ");
         gc.gridx = 0;
         gc.gridy = 5;
-        gc.gridwidth = 5;
+        gc.gridwidth = 100;
         add(con, gc);
 
         chooser = new JFileChooser();
@@ -224,9 +222,7 @@ public class ImageFetcher extends JFrame {
                         i++;
 
                         changeText(p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
-                        Thread.sleep(10L);
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (e.getCause() == new IndexOutOfBoundsException().getCause()) {
@@ -243,7 +239,6 @@ public class ImageFetcher extends JFrame {
 
     private void changeText(String s) {
         con.setText("Current File: " + s);
-        System.out.println("here");
     }
 
     public void saveImage(String imageUrl, String destinationFile) throws IOException {
