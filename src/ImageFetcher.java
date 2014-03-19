@@ -97,7 +97,11 @@ public class ImageFetcher extends JFrame{
         String abrevString = abrev.getText();
         String saveTo = loc.getText();
 
-        GetImage.getImage(setString.replaceAll(" ", "%20"), abrevString, saveTo);
+        try {
+            GetImage.getImage(setString.replaceAll(" ", "%20"), abrevString, saveTo);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
+        }
     }
 
 }

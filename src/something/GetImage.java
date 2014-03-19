@@ -3,15 +3,13 @@ package something;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GetImage {
 
-    public static void getImage(String l, String p, String lo) {
+    public static void getImage(String l, String p, String lo) throws Exception {
         try {
             JSONParser parser = new JSONParser();
             boolean not = true;
@@ -34,12 +32,9 @@ public class GetImage {
                 System.out.println(p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
             }
 
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 
