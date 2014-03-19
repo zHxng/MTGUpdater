@@ -101,7 +101,7 @@
       <file leaf-file-name="ImageFetcher.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="-1.6301887" vertical-offset="864" max-vertical-offset="1394">
+            <state line="39" column="36" selection-start="1002" selection-end="1002" vertical-scroll-proportion="0.6792453" vertical-offset="303" max-vertical-offset="1394">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -519,7 +519,7 @@
       <workItem from="1395187907637" duration="665000" />
       <workItem from="1395188623367" duration="1291000" />
       <workItem from="1395190055594" duration="996000" />
-      <workItem from="1395191089427" duration="879000" />
+      <workItem from="1395191089427" duration="1060000" />
     </task>
     <task id="LOCAL-00001" summary="&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;#&#10;# Initial commit&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/.name&#10;#&#9;new file:   .idea/artifacts/CardPuller.xml&#10;#&#9;new file:   .idea/compiler.xml&#10;#&#9;new file:   .idea/copyright/profiles_settings.xml&#10;#&#9;new file:   .idea/dictionaries/Alan.xml&#10;#&#9;new file:   .idea/encodings.xml&#10;#&#9;new file:   .idea/libraries/com_googlecode_json_simple_json_simple_1_1_1.xml&#10;#&#9;new file:   .idea/misc.xml&#10;#&#9;new file:   .idea/modules.xml&#10;#&#9;new file:   .idea/scopes/scope_settings.xml&#10;#&#9;new file:   .idea/uiDesigner.xml&#10;#&#9;new file:   .idea/vcs.xml&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#9;new file:   ImageSpammer.iml&#10;#&#9;new file:   META-INF/MANIFEST.MF&#10;#&#9;new file:   out/production/ImageSpammer/Main.class&#10;#&#9;new file:   out/production/ImageSpammer/getImage.class&#10;#&#9;new file:   out/production/ImageSpammer/setGUI.class&#10;#&#9;new file:   src/Main.java&#10;#&#9;new file:   src/getImage.java&#10;#&#9;new file:   src/setGUI.java&#10;#&#10;# Changes not staged for commit:&#10;#&#9;modified:   .idea/vcs.xml&#10;#&#9;modified:   .idea/workspace.xml&#10;#&#10;">
       <created>1395184990800</created>
@@ -553,11 +553,15 @@
       <created>1395191559653</created>
       <updated>1395191559653</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="WTF GridBagLayout&#10;">
+      <created>1395191986771</created>
+      <updated>1395191986771</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21596000" />
+    <option name="totallyTimeSpent" value="21777000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -630,7 +634,8 @@
     <MESSAGE value="Gui positioning" />
     <MESSAGE value="fixed something" />
     <MESSAGE value="GridBagLayout is retarted" />
-    <option name="LAST_COMMIT_MESSAGE" value="GridBagLayout is retarted" />
+    <MESSAGE value="WTF GridBagLayout&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="WTF GridBagLayout&#10;" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -926,7 +931,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageFetcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="7" selection-start="7" selection-end="7" vertical-scroll-proportion="-1.6301887" vertical-offset="864" max-vertical-offset="1394">
+        <state line="39" column="36" selection-start="1002" selection-end="1002" vertical-scroll-proportion="0.6792453" vertical-offset="303" max-vertical-offset="1394">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
