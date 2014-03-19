@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class GetImage {
 
-    public void getImage(String l, String p, String lo) {
+    public static void getImage(String l, String p, String lo) {
         try {
             JSONParser parser = new JSONParser();
             boolean not = true;

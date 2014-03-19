@@ -40,19 +40,19 @@ public class ImageFetcher extends JFrame{
         set = new JTextField();
         gc.gridx = -1;
         gc.gridy = 0;
-        set.setSize(50, 10);
+        set.setColumns(15);
         add(set, gc);
 
         abrev = new JTextField();
         gc.gridx = -1;
         gc.gridy = 1;
-        abrev.setSize(50, 10);
+        abrev.setColumns(15);
         add(abrev, gc);
 
         loc = new JTextField();
         gc.gridx = -1;
         gc.gridy = 2;
-        loc.setSize(50, 10);
+        loc.setColumns(15);
         add(loc, gc);
 
         s = new JLabel("Set: ");
