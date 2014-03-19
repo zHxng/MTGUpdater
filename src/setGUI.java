@@ -1,12 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class setGUI extends JFrame{
+public class SetGUI extends JFrame {
 
     JButton image;
     JButton price;
 
-    public setGUI(){
+    public SetGUI() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         setVisible(true);
         setSize(700, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -26,7 +39,16 @@ public class setGUI extends JFrame{
         gc.gridx = 0;
         gc.gridy = 1;
         add(price, gc);
+        image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("here");
+                dispose();
+                new ImageFetcher();
+            }
+        });
 
         pack();
     }
+
 }
