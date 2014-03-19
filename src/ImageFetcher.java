@@ -9,6 +9,7 @@ public class ImageFetcher extends JFrame{
 
     JButton back;
     JButton enter;
+    JButton fle;
     JTextField set;
     JTextField abrev;
     JTextField loc;
@@ -34,6 +35,8 @@ public class ImageFetcher extends JFrame{
 
         GridBagConstraints gc = new GridBagConstraints();
 
+        final JFileChooser fc = new JFileChooser();
+
         s = new JLabel("Set: ");
         gc.gridx = 0;
         gc.gridy = 0;
@@ -49,6 +52,11 @@ public class ImageFetcher extends JFrame{
         gc.gridy = 2;
         add(l, gc);
 
+        fle = new JButton("...");
+        gc.gridx = 2;
+        gc.gridy = 2;
+        add(fle, gc);
+
         set = new JTextField();
         gc.gridx = 5;
         gc.gridy = 0;
@@ -61,7 +69,7 @@ public class ImageFetcher extends JFrame{
         abrev.setColumns(15);
         add(abrev, gc);
 
-        loc = new JTextField();
+        loc = new JTextField(/*insert file path from fle*/);
         gc.gridx = 5;
         gc.gridy = 2;
         loc.setColumns(15);
@@ -94,6 +102,13 @@ public class ImageFetcher extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 thingHappened();
+            }
+        });
+
+        fle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //insert file thing
             }
         });
 
