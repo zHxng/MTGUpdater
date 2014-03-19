@@ -7,6 +7,7 @@ public class SetGUI extends JFrame {
 
     JButton image;
     JButton price;
+    JButton close;
 
     public SetGUI() {
         try {
@@ -21,11 +22,11 @@ public class SetGUI extends JFrame {
             e.printStackTrace();
         }
         setVisible(true);
-        setSize(700, 700);
-        setMinimumSize(new Dimension(700,700));
-        setMaximumSize(new Dimension(700,700));
-        setSize((new Dimension(700,700)));
-        setPreferredSize((new Dimension(700,700)));
+        setSize(300, 500);
+        setMinimumSize(new Dimension(300, 500));
+        setMaximumSize(new Dimension(300, 500));
+        setSize(new Dimension(300, 500));
+        setPreferredSize(new Dimension(300, 500));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("MTGUpdater");
@@ -40,15 +41,28 @@ public class SetGUI extends JFrame {
         gc.gridy = 0;
         add(image, gc);
 
-        price = new JButton("Fetch Prices");
+        price = new JButton(" Fetch Prices ");
         gc.gridx = 0;
         gc.gridy = 1;
         add(price, gc);
+
+        close = new JButton("      Close       ");
+        gc.gridx = 0;
+        gc.gridy = 2;
+        add(close, gc);
+
         image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 toImage();
+            }
+        });
+
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
         });
 
