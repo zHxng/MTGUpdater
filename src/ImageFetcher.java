@@ -4,8 +4,7 @@ import org.json.simple.parser.JSONParser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
 
@@ -22,6 +21,7 @@ public class ImageFetcher extends JFrame {
     JLabel l;
     JLabel con;
     JFileChooser chooser;
+    private boolean running = false;
 
     public ImageFetcher(JFrame prevGUI) {
         setVisible(true);
@@ -96,9 +96,53 @@ public class ImageFetcher extends JFrame {
         chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (running) {
+                    running = false;
+                    JOptionPane.showMessageDialog(null, "Downloading aborted!");
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (running) {
+                    running = false;
+                    JOptionPane.showMessageDialog(null, "Downloading aborted!");
+                }
                 dispose();
                 new SetGUI();
             }
@@ -121,6 +165,10 @@ public class ImageFetcher extends JFrame {
         fle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (running) {
+                    running = false;
+                    JOptionPane.showMessageDialog(null, "Downloading aborted!");
+                }
                 chooser.showOpenDialog(null);
             }
         });
@@ -129,6 +177,11 @@ public class ImageFetcher extends JFrame {
     }
 
     private void chooserHappened() {
+        if (running) {
+            running = false;
+            JOptionPane.showMessageDialog(null, "Downloading aborted!");
+        }
+
         File file = chooser.getSelectedFile();
         loc.setText(file.getPath());
     }
@@ -138,18 +191,23 @@ public class ImageFetcher extends JFrame {
         String abrevString = abrev.getText();
         String saveTo = loc.getText();
 
+        if (running) {
+            running = false;
+            JOptionPane.showMessageDialog(null, "Downloading aborted!");
+        }
+
+        running = true;
         getImage(setString.replaceAll(" ", "%20"), abrevString, saveTo);
     }
 
     public void getImage(final String l, final String p, final String lo) {
-        new Runnable() {
-
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 int i = 1;
                 try {
                     JSONParser parser = new JSONParser();
-                    while (true) {
+                    while (running) {
                         URL url = new URL(l);
                         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
                         JSONArray array = (JSONArray) parser.parse(reader);
@@ -164,20 +222,27 @@ public class ImageFetcher extends JFrame {
 
                         i++;
 
-                        con.setText("Current File: " + p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+                        changeText(p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+                        Thread.sleep(10L);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     if (e.getCause() == new IndexOutOfBoundsException().getCause()) {
                         JOptionPane.showMessageDialog(null, "Finished Downloading! :D");
+                        running = false;
                     } else {
                         JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
+                        running = false;
                     }
                 }
             }
+        }, "Download").start();
+    }
 
-        }.run();
+    private void changeText(String s) {
+        con.setText("Current File: " + s);
+        System.out.println("here");
     }
 
     public void saveImage(String imageUrl, String destinationFile) throws IOException {
