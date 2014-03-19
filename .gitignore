@@ -1,5 +1,4 @@
 /.idea/*
+/.idea
 *.iml
-/META-INF/*
-/out/*
-*.mf
+
