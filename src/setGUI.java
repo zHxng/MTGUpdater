@@ -44,7 +44,7 @@ public class SetGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("here");
                 dispose();
-                new ImageFetcher();
+                new ImageFetcher().requestFocus();
             }
         });
 
