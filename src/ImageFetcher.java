@@ -27,48 +27,48 @@ public class ImageFetcher extends JFrame{
 
         GridBagConstraints gc = new GridBagConstraints();
 
-        back = new JButton("<-- Back");
-        gc.gridx = -10;
-        gc.gridy = 10;
-        add(back, gc);
+        s = new JLabel("Set: ");
+        gc.gridx = -5;
+        gc.gridy = 0;
+        add(s, gc);
 
-        enter = new JButton("Submit");
-        gc.gridx = -1;
-        gc.gridy = 4;
-        add(enter, gc);
+        a = new JLabel("Abrev: ");
+        gc.gridx = -5;
+        gc.gridy = 1;
+        add(a, gc);
+
+        l = new JLabel("Save To: ");
+        gc.gridx = -5;
+        gc.gridy = 2;
+        add(l, gc);
 
         set = new JTextField();
-        gc.gridx = -1;
+        gc.gridx = 15;
         gc.gridy = 0;
         set.setColumns(15);
         add(set, gc);
 
         abrev = new JTextField();
-        gc.gridx = -1;
+        gc.gridx = 15;
         gc.gridy = 1;
         abrev.setColumns(15);
         add(abrev, gc);
 
         loc = new JTextField();
-        gc.gridx = -1;
+        gc.gridx = 15;
         gc.gridy = 2;
         loc.setColumns(15);
         add(loc, gc);
 
-        s = new JLabel("Set: ");
-        gc.gridx = 1;
-        gc.gridy = 0;
-        add(s, gc);
+        back = new JButton("<-- Back");
+        gc.gridx = 35;
+        gc.gridy = 50;
+        add(back, gc);
 
-        a = new JLabel("Abrev: ");
-        gc.gridx = 1;
-        gc.gridy = 1;
-        add(a, gc);
-
-        l = new JLabel("Save To: ");
-        gc.gridx = 1;
-        gc.gridy = 2;
-        add(l, gc);
+        enter = new JButton("Submit");
+        gc.gridx = 15;
+        gc.gridy = 4;
+        add(enter, gc);
 
         pack();
     }
