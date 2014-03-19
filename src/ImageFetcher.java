@@ -72,7 +72,7 @@ public class ImageFetcher extends JFrame {
         abrev.setColumns(15);
         add(abrev, gc);
 
-        loc = new JTextField(/*insert file path from fle*/);
+        loc = new JTextField();
         gc.gridx = 5;
         gc.gridy = 2;
         loc.setColumns(15);
@@ -91,6 +91,7 @@ public class ImageFetcher extends JFrame {
         con = new JLabel("Current File: ");
         gc.gridx = 0;
         gc.gridy = 5;
+        gc.gridwidth = 5;
         add(con, gc);
 
         chooser = new JFileChooser();
