@@ -1,11 +1,12 @@
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        getImage myImage = new getImage();
-        setGUI myGUI = new setGUI();
+        GetImage myImage = new GetImage();
+        SetGUI myGUI = new SetGUI();
         //if(){
-            myImage.getImage(getLink(),getAbrev(),getLocation());
+        myImage.getImage(getLink(), getAbrev(), getLocation());
         //}else{
 
         //}
@@ -13,7 +14,7 @@ public class Main {
         System.out.println("Working!");
     }
 
-    private static String getLink(){
+    private static String getLink() {
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Set Link?");
@@ -22,7 +23,7 @@ public class Main {
         return link;
     }
 
-    private static String getAbrev(){
+    private static String getAbrev() {
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Set Abbreviation?");
@@ -31,7 +32,7 @@ public class Main {
         return pre;
     }
 
-    private static String getLocation(){
+    private static String getLocation() {
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Where to save?");

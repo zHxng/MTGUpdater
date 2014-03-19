@@ -7,13 +7,14 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class getImage {
-    public static void getImage(String l, String p, String lo){
+public class GetImage {
+
+    public void getImage(String l, String p, String lo) {
         try {
             JSONParser parser = new JSONParser();
             boolean not = true;
             int i = 0;
-            while(not) {
+            while (not) {
                 URL url = new URL(l);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
                 JSONArray array = (JSONArray) parser.parse(reader);
@@ -24,7 +25,7 @@ public class getImage {
                 JSONArray array1 = (JSONArray) parser.parse(reader1);
                 JSONObject object1 = (JSONObject) array1.get(0);
                 String imageURL = object1.get("image").toString();
-                saveImage(imageURL,lo + "\\" + p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
+                saveImage(imageURL, lo + "\\" + p + "-" + object.get("name").toString().replaceAll(":", " ").replaceAll("Æ", "AE").replaceAll("//", " ") + ".jpg");
 
                 i++;
 
