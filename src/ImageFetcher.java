@@ -149,7 +149,7 @@ public class ImageFetcher extends JFrame {
                     running = false;
                     JOptionPane.showMessageDialog(null, "Downloading aborted! D:");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Not started!");
+                    JOptionPane.showMessageDialog(null, "Not started!", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -248,7 +248,7 @@ public class ImageFetcher extends JFrame {
                         JOptionPane.showMessageDialog(null, "Finished Downloading! :D");
                         running = false;
                     } else {
-                        JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?");
+                        JOptionPane.showMessageDialog(null, "An Error Occured. Did you spell something wrong?", "Error!", JOptionPane.ERROR_MESSAGE);
                         running = false;
                     }
                 }

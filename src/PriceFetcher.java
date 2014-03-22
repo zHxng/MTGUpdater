@@ -2,20 +2,31 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class PriceFetcher extends JFrame{
+public class PriceFetcher extends JFrame {
 
     JButton back;
     JButton urlButton;
     JTextField card;
+    JTextField set;
+    JLabel label;
+    JLabel setLabel;
 
-    public PriceFetcher(JFrame prevGUI){
+    public PriceFetcher(JFrame prevGUI) {
         setVisible(true);
         setSize(300, 500);
         setMinimumSize(new Dimension(300, 500));
@@ -34,21 +45,37 @@ public class PriceFetcher extends JFrame{
 
         back = new JButton("<-- Back");
         gc.gridx = 0;
-        gc.gridy = 1;
+        gc.gridy = 2;
         add(back, gc);
 
         urlButton = new JButton("Submit");
         gc.gridx = 1;
-        gc.gridy = 1;
+        gc.gridy = 2;
         add(urlButton, gc);
 
-        card = new JTextField();
+        label = new JLabel("Card: ");
         gc.gridx = 0;
+        gc.gridy = 0;
+        add(label, gc);
+
+        setLabel = new JLabel("Set: ");
+        gc.gridx = 0;
+        gc.gridy = 1;
+        add(setLabel, gc);
+
+        card = new JTextField();
+        gc.gridx = 1;
         gc.gridy = 0;
         gc.gridwidth = 100;
         card.setColumns(20);
-        card.setText("Insert Card");
         add(card, gc);
+
+        set = new JTextField();
+        gc.gridx = 1;
+        gc.gridy = 1;
+        gc.gridwidth = 100;
+        set.setColumns(20);
+        add(set, gc);
 
         back.addActionListener(new ActionListener() {
             @Override
@@ -74,10 +101,10 @@ public class PriceFetcher extends JFrame{
     }
 
     private void fetchPrice() throws Exception {
-        getCookie(this.card.getText());
+        getCookie(this.card.getText(), this.set.getText());
     }
 
-    private void getCookie(String card) throws Exception {
+    private void getCookie(String card, String set) throws Exception {
         Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
                 .method(Connection.Method.GET)
                 .header("Accept-Encoding", "gzip,deflate,sdch")
@@ -110,11 +137,11 @@ public class PriceFetcher extends JFrame{
         String UID = cookies.get("D_UID");
         String IID = cookies.get("D_IID");
 
-        connectTo(SID, PID, UID, IID, card);
+        connectTo(SID, PID, UID, IID, card, set);
     }
 
-    private void connectTo(String sid, String pid, String uid, String iid, String card) throws Exception {
-        Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
+    private void connectTo(String sid, String pid, String uid, String iid, String card, String set) throws Exception {
+        Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
                 .method(Connection.Method.GET)
                 .header("Accept-Encoding", "gzip,deflate,sdch")
                 .header("Connection", "keep-alive")
@@ -129,7 +156,80 @@ public class PriceFetcher extends JFrame{
                 .execute();
 
         Document doc = response.parse();
-        System.out.println(doc.body());
+        Elements trElements = doc.getElementsByTag("tr");
+
+        // Price: deckdbbody search_results_9
+        // Set: deckdbbody search_results_2
+
+        // $: rmUuft
+        // 0: pZOspA rmUuft kznGOn
+        // 1: rmUuft jDhAhn2 kznGOn
+        // 2:
+        // 3:
+        // 4: kznGOn wBJlhw rmUuft
+        // 5: vDqctQ rmUuft kznGOn
+        // 5: rmUuft ltJnjG2 kznGOn
+        // .: ASEUvo kznGOn rmUuft
+
+        BufferedImage image = null;
+        char[] charArray;
+
+        boolean gotten = false;
+        for (Element trElement : trElements) {
+            if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody_row2")) {
+                Elements tdElements = trElement.getElementsByTag("td");
+                for (Element tdElement : tdElements) {
+                    if (tdElement.hasClass("search_results_2")) {
+                        System.out.println(tdElement.html());
+                    }
+                    if (tdElement.hasClass("search_results_9")) {
+                        Elements divElements = tdElement.getElementsByTag("div");
+                        for (Element divElement : divElements) {
+                            if (divElement.classNames().size() == 3 && !gotten) {
+                                gotten = true;
+                                for (Object object : divElement.classNames().toArray()) {
+                                    String string = String.valueOf(object);
+                                    Element style = doc.select("style").first();
+                                    Matcher cssMatcher = Pattern.compile("[.](\\w+)\\s*[{]([^}]+)[}]").matcher(style.html());
+                                    while (cssMatcher.find()) {
+                                        if (cssMatcher.group(1).equals(string)) {
+                                            if (cssMatcher.group(2).contains("//")) {
+                                                System.out.println("here");
+                                                String s = "http://" + cssMatcher.group(2).split("//")[1].replace(");", "");
+                                                System.out.println(s);
+                                                URL url = new URL(s);
+                                                URLConnection con = url.openConnection();
+                                                con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                                                con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36");
+                                                con.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+                                                con.setRequestProperty("Cookie", "D_SID=" + sid + ";"
+                                                                + "D_PID=" + pid + ";"
+                                                                + "D_UID=" + uid + ";"
+                                                                + "D_IID=" + iid + ";"
+                                                );
+                                                con.setRequestProperty("Referer", response.url().toString());
+                                                InputStream input = con.getInputStream();
+                                                image = ImageIO.read(input);
+                                            }
+                                        }
+                                    }
+                                }
+//                                System.out.println(image);
+//                                URL url = new URL(image);
+
+                                assert image != null;
+                                ImageIcon icon = new ImageIcon(image);
+                                charArray = ((String) JOptionPane.showInputDialog(null,
+                                        "Enter 1st row numbers as they appear.",
+                                        "Not a catchpa! (StarCityGames is stupid)",
+                                        JOptionPane.QUESTION_MESSAGE, icon, null, null)).toCharArray();
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
 }
