@@ -171,58 +171,47 @@ public class PriceFetcher extends JFrame {
         // 5: rmUuft ltJnjG2 kznGOn
         // .: ASEUvo kznGOn rmUuft
 
-        BufferedImage image = null;
         char[] charArray;
 
-        boolean gotten = false;
+        boolean gottenImage = false;
+
         for (Element trElement : trElements) {
             if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody_row2")) {
                 Elements tdElements = trElement.getElementsByTag("td");
                 for (Element tdElement : tdElements) {
-                    if (tdElement.hasClass("search_results_2")) {
-                        System.out.println(tdElement.html());
-                    }
                     if (tdElement.hasClass("search_results_9")) {
                         Elements divElements = tdElement.getElementsByTag("div");
                         for (Element divElement : divElements) {
-                            if (divElement.classNames().size() == 3 && !gotten) {
-                                gotten = true;
-                                for (Object object : divElement.classNames().toArray()) {
-                                    String string = String.valueOf(object);
-                                    Element style = doc.select("style").first();
-                                    Matcher cssMatcher = Pattern.compile("[.](\\w+)\\s*[{]([^}]+)[}]").matcher(style.html());
-                                    while (cssMatcher.find()) {
-                                        if (cssMatcher.group(1).equals(string)) {
-                                            if (cssMatcher.group(2).contains("//")) {
-                                                System.out.println("here");
-                                                String s = "http://" + cssMatcher.group(2).split("//")[1].replace(");", "");
-                                                System.out.println(s);
-                                                URL url = new URL(s);
-                                                URLConnection con = url.openConnection();
-                                                con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-                                                con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36");
-                                                con.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
-                                                con.setRequestProperty("Cookie", "D_SID=" + sid + ";"
-                                                                + "D_PID=" + pid + ";"
-                                                                + "D_UID=" + uid + ";"
-                                                                + "D_IID=" + iid + ";"
-                                                );
-                                                con.setRequestProperty("Referer", response.url().toString());
-                                                InputStream input = con.getInputStream();
-                                                image = ImageIO.read(input);
-                                            }
+                            // Get numbers
+                            if (divElement.classNames().size() == 3) {
+                                if (!gottenImage) {
+                                    gottenImage = true;
+                                    BufferedImage image = null;
+                                    for (Object object : divElement.classNames().toArray()) {
+                                        String string = String.valueOf(object);
+                                        String css = getCss(doc, string);
+                                        if (css.contains("//")) {
+                                            URL url = new URL("http://" + css.split("//")[1].replace(");", ""));
+                                            URLConnection con = url.openConnection();
+                                            con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                                            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36");
+                                            con.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+                                            con.setRequestProperty("Cookie", "D_SID=" + sid + ";"
+                                                            + "D_PID=" + pid + ";"
+                                                            + "D_UID=" + uid + ";"
+                                                            + "D_IID=" + iid + ";"
+                                            );
+                                            con.setRequestProperty("Referer", response.url().toString());
+                                            InputStream input = con.getInputStream();
+                                            image = ImageIO.read(input);
                                         }
                                     }
+                                    assert image != null;
+                                    ImageIcon icon = new ImageIcon(image);
+                                    charArray = getNumbers(icon);
+                                    runAfterImage(doc, tdElements, charArray);
+                                    return;
                                 }
-//                                System.out.println(image);
-//                                URL url = new URL(image);
-
-                                assert image != null;
-                                ImageIcon icon = new ImageIcon(image);
-                                charArray = ((String) JOptionPane.showInputDialog(null,
-                                        "Enter 1st row numbers as they appear.",
-                                        "Not a catchpa! (StarCityGames is stupid)",
-                                        JOptionPane.QUESTION_MESSAGE, icon, null, null)).toCharArray();
                             }
                         }
                     }
@@ -230,6 +219,66 @@ public class PriceFetcher extends JFrame {
                 }
             }
         }
+    }
+
+    private void runAfterImage(Document doc, Elements tdElements, char[] charArray) {
+        StringBuilder builder = new StringBuilder();
+        for (Element tdElement : tdElements) {
+            if (tdElement.hasClass("search_results_2")) {
+                System.out.println(tdElement.html());
+            }
+            if (tdElement.hasClass("search_results_9")) {
+                Elements divElements = tdElement.getElementsByTag("div");
+                for (Element divElement : divElements) {
+                    // Get numbers
+                    if (divElement.classNames().size() == 3) {
+                        for (Object o : divElement.classNames().toArray()) {
+                            String css = getCss(doc, String.valueOf(o));
+                            if (css.contains("//"))
+                                continue;
+                            if (css.contains("float"))
+                                continue;
+                            if (css.contains("width")) {
+                                builder.append(".");
+                                continue;
+                            }
+                            builder.append(getNumber(getBackgroundPosition(css), charArray));
+//                                    String[] fields = css.split(";");
+//                                    System.out.println(Arrays.toString(fields));
+                        }
+                    }
+                }
+                builder.append("\n");
+            }
+        }
+        JOptionPane.showMessageDialog(null, builder);
+    }
+
+    private int getBackgroundPosition(String css) {
+        return Math.abs(Integer.parseInt(css.split(":")[1].split(" ")[0].replace("px", "")));
+    }
+
+    private char getNumber(int backgroundPosition, char[] numbers) {
+        if (backgroundPosition % 7 != 0)
+            return numbers[numbers.length - 2];
+        return numbers[backgroundPosition / 7];
+    }
+
+    private char[] getNumbers(ImageIcon icon) {
+        return ((String) JOptionPane.showInputDialog(null,
+                "Enter 1st row numbers as they appear.",
+                "Not a catchpa! (StarCityGames is stupid)",
+                JOptionPane.QUESTION_MESSAGE, icon, null, null)).toCharArray();
+    }
+
+    private String getCss(Document doc, String clazz) {
+        Element styles = doc.select("style").first();
+        Matcher cssMatcher = Pattern.compile("[.](\\w+)\\s*[{]([^}]+)[}]").matcher(styles.html());
+        while (cssMatcher.find()) {
+            if (cssMatcher.group(1).equals(clazz))
+                return cssMatcher.group(2);
+        }
+        return null;
     }
 
 }
