@@ -105,28 +105,37 @@ public class PriceFetcher extends JFrame {
         });
 
         urlButton.addActionListener(new ActionListener() {
+            private int i;
+            private int current;
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < csv.cells.size(); i++) {
-                    try {
-                        fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                while (i < csv.cells.size() || failed.size() > 0) {
+                    if (failed.size() > 0) {
+                        current = failed.get(failed.size() - 1);
+                        failed.remove(failed.size() - 1);
+                    } else {
+                        current = i++;
                     }
-                    try {
-                        csv.save(new File("prices.csv"));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                        try {
+                            fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            csv.save(new File("prices.csv"));
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        try {
+                            Thread.sleep(200L);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
                     }
-                    try {
-                        Thread.sleep(1000L);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
             }
-
         });
+
         pack();
     }
 
@@ -215,9 +224,9 @@ public class PriceFetcher extends JFrame {
                                             con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36");
                                             con.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
                                             con.setRequestProperty("Cookie", "D_SID=" + sid + ";"
-                                                            + "D_PID=" + pid + ";"
-                                                            + "D_UID=" + uid + ";"
-                                                            + "D_IID=" + iid + ";"
+                                                    + "D_PID=" + pid + ";"
+                                                    + "D_UID=" + uid + ";"
+                                                    + "D_IID=" + iid + ";"
                                             );
                                             con.setRequestProperty("Referer", response.url().toString());
                                             InputStream input = con.getInputStream();
