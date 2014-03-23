@@ -10,23 +10,34 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PriceFetcher extends JFrame {
 
-    JButton back;
-    JButton urlButton;
-    JTextField card;
-    JTextField set;
-    JLabel label;
-    JLabel setLabel;
+    private int numberOfThreadsCurrentlyRunning;
+    private ArrayList<Integer> failed = new ArrayList<Integer>();
+    private JButton back;
+    private JButton urlButton;
+    private JTextField card;
+    private JTextField set;
+    private JLabel label;
+    private JLabel setLabel;
+    private JTextArea area;
+    private CSVIO csv;
 
     public PriceFetcher(JFrame prevGUI) {
+        try {
+            csv = new CSVIO(new File("cards.csv"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         setVisible(true);
         setSize(300, 500);
         setMinimumSize(new Dimension(300, 500));
@@ -77,6 +88,14 @@ public class PriceFetcher extends JFrame {
         set.setColumns(20);
         add(set, gc);
 
+        area = new JTextArea();
+        gc.gridx = 0;
+        gc.gridy = 3;
+        gc.gridwidth = 100;
+        gc.gridheight = 10;
+        area.setEditable(false);
+        add(area, gc);
+
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,13 +105,39 @@ public class PriceFetcher extends JFrame {
         });
 
         urlButton.addActionListener(new ActionListener() {
+            private int i;
+            private int current;
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    fetchPrice();
-//                    getCookie(card.getText());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                while (i < csv.cells.size() || failed.size() > 0) {
+                    while (numberOfThreadsCurrentlyRunning > 10) {
+                        try {
+                            Thread.sleep(100L);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    if (failed.size() > 0) {
+                        current = failed.get(failed.size() - 1);
+                        failed.remove(failed.size() - 1);
+                    } else {
+                        current = i++;
+                    }
+                    new Thread(new Runnable() {
+                        int a = current;
+                        @Override
+                        public void run() {
+                            numberOfThreadsCurrentlyRunning++;
+                            try {
+                                fetchPrice(csv.get(a, 0), csv.get(a, 2), csv.get(a, 4), a);
+                                csv.save();
+                            } catch (Exception e1) {
+                                failed.add(a);
+                            }
+                            numberOfThreadsCurrentlyRunning--;
+                        }
+                    }).start();
+                    System.out.println(failed);
                 }
             }
         });
@@ -100,11 +145,11 @@ public class PriceFetcher extends JFrame {
         pack();
     }
 
-    private void fetchPrice() throws Exception {
-        getCookie(this.card.getText(), this.set.getText());
+    private void fetchPrice(String s, String s1, String s2, int row) throws Exception {
+        getCookie(s, s1, s2.equalsIgnoreCase("yes"), row);
     }
 
-    private void getCookie(String card, String set) throws Exception {
+    private void getCookie(String card, String set, boolean rarity, int row) throws Exception {
         Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
                 .method(Connection.Method.GET)
                 .header("Accept-Encoding", "gzip,deflate,sdch")
@@ -137,10 +182,11 @@ public class PriceFetcher extends JFrame {
         String UID = cookies.get("D_UID");
         String IID = cookies.get("D_IID");
 
-        connectTo(SID, PID, UID, IID, card, set);
+        connectTo(SID, PID, UID, IID, card, set, rarity, row);
     }
 
-    private void connectTo(String sid, String pid, String uid, String iid, String card, String set) throws Exception {
+    private void connectTo(String sid, String pid, String uid, String iid, String card, String set, boolean rarity, int row) throws Exception {
+//        System.out.println("http://sales.starcitygames.com/search.php?substring=" + card);
         Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
                 .method(Connection.Method.GET)
                 .header("Accept-Encoding", "gzip,deflate,sdch")
@@ -158,25 +204,11 @@ public class PriceFetcher extends JFrame {
         Document doc = response.parse();
         Elements trElements = doc.getElementsByTag("tr");
 
-        // Price: deckdbbody search_results_9
-        // Set: deckdbbody search_results_2
-
-        // $: rmUuft
-        // 0: pZOspA rmUuft kznGOn
-        // 1: rmUuft jDhAhn2 kznGOn
-        // 2:
-        // 3:
-        // 4: kznGOn wBJlhw rmUuft
-        // 5: vDqctQ rmUuft kznGOn
-        // 5: rmUuft ltJnjG2 kznGOn
-        // .: ASEUvo kznGOn rmUuft
-
-        char[] charArray;
+        int[] numbers = null;
 
         boolean gottenImage = false;
-
         for (Element trElement : trElements) {
-            if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody_row2")) {
+            if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody2_row")) {
                 Elements tdElements = trElement.getElementsByTag("td");
                 for (Element tdElement : tdElements) {
                     if (tdElement.hasClass("search_results_9")) {
@@ -185,7 +217,6 @@ public class PriceFetcher extends JFrame {
                             // Get numbers
                             if (divElement.classNames().size() == 3) {
                                 if (!gottenImage) {
-                                    gottenImage = true;
                                     BufferedImage image = null;
                                     for (Object object : divElement.classNames().toArray()) {
                                         String string = String.valueOf(object);
@@ -204,30 +235,37 @@ public class PriceFetcher extends JFrame {
                                             con.setRequestProperty("Referer", response.url().toString());
                                             InputStream input = con.getInputStream();
                                             image = ImageIO.read(input);
+                                            gottenImage = true;
                                         }
                                     }
                                     assert image != null;
-                                    ImageIcon icon = new ImageIcon(image);
-                                    charArray = getNumbers(icon);
-                                    runAfterImage(doc, tdElements, charArray);
-                                    return;
+                                    numbers = getNumbers(image);
                                 }
                             }
                         }
                     }
-
+                }
+                if (gottenImage) {
+                    runAfterImage(doc, tdElements, numbers, set, rarity, row);
+                    break;
                 }
             }
         }
     }
 
-    private void runAfterImage(Document doc, Elements tdElements, char[] charArray) {
+    private void runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity, int row) throws Exception {
         StringBuilder builder = new StringBuilder();
+        boolean skip = false;
         for (Element tdElement : tdElements) {
             if (tdElement.hasClass("search_results_2")) {
-                System.out.println(tdElement.html());
+                String setName = Sets.main().get(set);
+                if (!tdElement.text().equals(setName + (rarity ? " (Foil)" : ""))) {
+                    skip = true;
+                    break;
+                }
             }
-            if (tdElement.hasClass("search_results_9")) {
+            if (tdElement.hasClass("search_results_9") && !skip) {
+                skip = false;
                 Elements divElements = tdElement.getElementsByTag("div");
                 for (Element divElement : divElements) {
                     // Get numbers
@@ -242,33 +280,32 @@ public class PriceFetcher extends JFrame {
                                 builder.append(".");
                                 continue;
                             }
-                            builder.append(getNumber(getBackgroundPosition(css), charArray));
+                            builder.append(getNumber(getBackgroundPosition(css), numbers));
 //                                    String[] fields = css.split(";");
 //                                    System.out.println(Arrays.toString(fields));
                         }
                     }
                 }
-                builder.append("\n");
             }
         }
-        JOptionPane.showMessageDialog(null, builder);
+//        System.out.println(builder.toString());
+//        area.append(builder.toString());
+        csv.set(row, 5, builder.toString());
+        csv.save(new File("prices.csv"));
     }
 
     private int getBackgroundPosition(String css) {
         return Math.abs(Integer.parseInt(css.split(":")[1].split(" ")[0].replace("px", "")));
     }
 
-    private char getNumber(int backgroundPosition, char[] numbers) {
+    private int getNumber(int backgroundPosition, int[] numbers) {
         if (backgroundPosition % 7 != 0)
-            return numbers[numbers.length - 2];
+            return numbers[numbers.length - 1];
         return numbers[backgroundPosition / 7];
     }
 
-    private char[] getNumbers(ImageIcon icon) {
-        return ((String) JOptionPane.showInputDialog(null,
-                "Enter 1st row numbers as they appear.",
-                "Not a catchpa! (StarCityGames is stupid)",
-                JOptionPane.QUESTION_MESSAGE, icon, null, null)).toCharArray();
+    private int[] getNumbers(BufferedImage image) throws Exception {
+        return Reader.findDigits(ImageIO.read(new File("template.png")), image, 2, 1, 9, 5, 8, 6, 7, 0, 3, 4);
     }
 
     private String getCss(Document doc, String clazz) {
@@ -279,6 +316,67 @@ public class PriceFetcher extends JFrame {
                 return cssMatcher.group(2);
         }
         return null;
+    }
+
+}
+
+class Reader {
+
+    public static final int tolerance = 100;
+
+    public static int[] findDigits(BufferedImage template, BufferedImage decode, int... orderOfTemplate) throws Exception {
+        int[] array = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+        int[][][] digits = loadAllDigits(template, orderOfTemplate);
+        int[][][] loaded = loadAllDigits(decode, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (equals(digits[i], loaded[j])) {
+                    array[j] = i;
+                }
+            }
+        }
+        return array;
+    }
+
+    public static boolean equals(int[][] a1, int[][] a2) {
+        if (a1 == null || a2 == null) {
+            return false;
+        }
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 16; j++) {
+                if (!compare(a1[i][j], a2[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean compare(int c1, int c2) {
+        int red1 = (c1 >> 16) & 0xFF;
+        int green1 = (c1 >> 8) & 0xFF;
+        int blue1 = c1 & 0xFF;
+
+        int red2 = (c2 >> 16) & 0xFF;
+        int green2 = (c2 >> 8) & 0xFF;
+        int blue2 = c2 & 0xFF;
+
+        return
+                Math.abs(red1 - red2) < tolerance &&
+                        Math.abs(green1 - green2) < tolerance &&
+                        Math.abs(blue1 - blue2) < tolerance;
+    }
+
+    public static int[][][] loadAllDigits(BufferedImage image, int... order) throws Exception {
+        int[][][] array = new int[10][7][16];
+        for (int i = 0; i < 10; i++) {
+            for (int x = 0; x < 7; x++) {
+                for (int y = 0; y < 16; y++) {
+                    array[order[i]][x][y] = image.getRGB(x + i * 7 + (i == 9 ? 3 : 0), y);
+                }
+            }
+        }
+        return array;
     }
 
 }

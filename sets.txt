@@ -1,0 +1,115 @@
+10E 10th Edition
+2ED Unlimited
+3ED Revised Edition
+4ED 4th Edition
+5DN Fifth Dawn
+5ED 5th Edition
+6ED Classic (Sixth Edition)
+7ED 7th Edition
+8ED 8th Edition
+9ED 9th Edition
+ALA Shards of Alara
+ALL Alliances
+APC Apocalypse
+ARB Alara Reborn
+ARC Archenemy
+ARN Arabian Nights
+ATQ Antiquities
+AVN Ajani vs. Nicol Bolas
+AVR Avacyn Restored
+BNG Born of the Gods
+BOK Betrayers of Kamigawa
+BRB Battle Royale
+BTD Beatdown
+C13 Commander 2013
+CHK Champions of Kamigawa
+CHR Chronicles
+COM Commander
+CON Conflux
+CSP Coldsnap
+DDG Knights vs. Dragons
+DDJ Izzet vs Golgari
+DDK Sorin vs. Tibalt
+DDM Jace vs. Vraska
+DGM Dragon's Maze
+DIS Dissension
+DKA Dark Ascension
+DKM Deckmasters
+DRB From the Vault: Dragons
+DRK The Dark
+DST Darksteel
+DVD Divine vs. Demonic
+EVE Eventide
+EVT Elspeth vs. Tezzeret
+EXO Exodus
+FEM Fallen Empires
+FTV From the Vault: Twenty
+FUT Future Sight
+FVR From the Vault: Realms
+GPT Guildpact
+GTC Gatecrash
+GVL Garruk vs. Liliana
+H09 Slivers
+H10 Fire & Lightning
+HML Homelands
+HVM Heroes vs. Monsters
+ICE Ice Age
+INV Invasion
+ISD Innistrad
+JUD Judgment
+JVC Jace vs. Chandra
+LEA Limited Edition Alpha
+LEB Limited Edition Beta
+LEG Legends
+LGN Legions
+LRW Lorwyn
+M10 2010 Core Set
+M11 2011 Core Set
+M12 2012 Core Set
+M13 2013 Core set
+M14 2014 Core set
+MBS Mirrodin Besieged
+MIR Mirage
+MM Modern Masters
+MMQ Mercadian Masques
+MOR Morningtide
+MRD Mirrodin
+NMS Nemesis
+NPH New Phyrexia
+ODY Odyssey
+ONS Onslaught
+OTHERS Vanguard
+OTHERS Duels of the Planeswalkers
+OTHERS Venser vs. Koth
+P12 Planechase 2012 Edition
+PCY Prophecy
+PD3 Graveborn
+PLC Planar Chaos
+PLS Planeshift
+POR Portal
+PPR Promo Cards
+PVC Phyrexia vs. Coalition
+RAV Ravnica: City of Guilds
+ROE Rise of the Eldrazi
+RTR Return to Ravnica
+SCG Scourge
+SHM Shadowmoor
+SOK Saviors of Kamigawa
+SOM Scars of Mirrodin
+STH Stronghold
+THS Theros
+TMP Tempest
+TOR Torment
+TSB Time Spiral "Timeshifted"
+TSP Time Spiral
+UDS Urza's Destiny
+UGL Unglued
+ULG Urza's Legacy
+UNH Unhinged
+USG Urza's Saga
+V11 From the Vault: Legends
+VIS Visions
+WCS World Championships
+WTH Weatherlight
+WWK Worldwake
+ZEN Zendikar
