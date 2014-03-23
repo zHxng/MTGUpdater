@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class PriceFetcher extends JFrame {
 
     private int numberOfThreadsCurrentlyRunning;
-    private ArrayList<Integer> failed = new ArrayList<Integer>();
+    private final ArrayList<Integer> failed = new ArrayList<Integer>();
     private JButton back;
     private JButton urlButton;
     private JTextField card;
@@ -107,37 +107,47 @@ public class PriceFetcher extends JFrame {
         urlButton.addActionListener(new ActionListener() {
             private int i;
             private int current;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 while (i < csv.cells.size() || failed.size() > 0) {
-                    while (numberOfThreadsCurrentlyRunning > 10) {
+                    while (numberOfThreadsCurrentlyRunning > 1) {
                         try {
-                            Thread.sleep(100L);
+                            Thread.sleep(1000L);
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
                     }
-                    if (failed.size() > 0) {
-                        current = failed.get(failed.size() - 1);
-                        failed.remove(failed.size() - 1);
-                    } else {
-                        current = i++;
+                    synchronized (failed) {
+                        if (failed.size() > 0) {
+                            current = failed.get(failed.size() - 1);
+                            failed.remove(failed.size() - 1);
+                        } else {
+                            current = i++;
+                        }
                     }
                     new Thread(new Runnable() {
                         int a = current;
+
                         @Override
                         public void run() {
                             numberOfThreadsCurrentlyRunning++;
                             try {
                                 fetchPrice(csv.get(a, 0), csv.get(a, 2), csv.get(a, 4), a);
-                                csv.save();
                             } catch (Exception e1) {
-                                failed.add(a);
+                                e1.printStackTrace();
+                                synchronized (failed) {
+                                    failed.add(a);
+                                }
+                            }
+                            try {
+                                csv.save(new File("prices.csv"));
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
                             }
                             numberOfThreadsCurrentlyRunning--;
                         }
                     }).start();
-                    System.out.println(failed);
                 }
             }
         });
@@ -181,6 +191,8 @@ public class PriceFetcher extends JFrame {
         String PID = cookies.get("D_PID");
         String UID = cookies.get("D_UID");
         String IID = cookies.get("D_IID");
+
+        System.out.println(SID + ", " + PID + ", " + UID + ", " + IID);
 
         connectTo(SID, PID, UID, IID, card, set, rarity, row);
     }
@@ -290,8 +302,8 @@ public class PriceFetcher extends JFrame {
         }
 //        System.out.println(builder.toString());
 //        area.append(builder.toString());
+        System.out.println(builder.toString());
         csv.set(row, 5, builder.toString());
-        csv.save(new File("prices.csv"));
     }
 
     private int getBackgroundPosition(String css) {
