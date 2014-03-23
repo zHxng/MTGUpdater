@@ -105,53 +105,28 @@ public class PriceFetcher extends JFrame {
         });
 
         urlButton.addActionListener(new ActionListener() {
-            private int i;
-            private int current;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                while (i < csv.cells.size() || failed.size() > 0) {
-                    while (numberOfThreadsCurrentlyRunning > 1) {
-                        try {
-                            Thread.sleep(1000L);
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
+                for (int i = 0; i < csv.cells.size(); i++) {
+                    try {
+                        fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
-                    synchronized (failed) {
-                        if (failed.size() > 0) {
-                            current = failed.get(failed.size() - 1);
-                            failed.remove(failed.size() - 1);
-                        } else {
-                            current = i++;
-                        }
+                    try {
+                        csv.save(new File("prices.csv"));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
-                    new Thread(new Runnable() {
-                        int a = current;
-
-                        @Override
-                        public void run() {
-                            numberOfThreadsCurrentlyRunning++;
-                            try {
-                                fetchPrice(csv.get(a, 0), csv.get(a, 2), csv.get(a, 4), a);
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                                synchronized (failed) {
-                                    failed.add(a);
-                                }
-                            }
-                            try {
-                                csv.save(new File("prices.csv"));
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
-                            numberOfThreadsCurrentlyRunning--;
-                        }
-                    }).start();
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
-        });
 
+        });
         pack();
     }
 
