@@ -105,7 +105,7 @@ public class PriceFetcher extends JFrame {
         });
 
         urlButton.addActionListener(new ActionListener() {
-            private int i;
+            private int i = 1;
             private int current;
 
             @Override
@@ -117,22 +117,23 @@ public class PriceFetcher extends JFrame {
                     } else {
                         current = i++;
                     }
-                        try {
-                            fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        try {
-                            csv.save(new File("prices.csv"));
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
+                    try {
+                        fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
+                    try {
+                        csv.save(new File("prices.csv"));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                    try {
+                        Thread.sleep(200L);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println(failed);
+                }
             }
         });
 
