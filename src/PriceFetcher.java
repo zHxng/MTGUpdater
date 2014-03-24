@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 
 public class PriceFetcher extends JFrame {
 
-    private int numberOfThreadsCurrentlyRunning;
     private final ArrayList<Integer> failed = new ArrayList<Integer>();
     private JButton back;
     private JButton urlButton;
@@ -104,26 +103,40 @@ public class PriceFetcher extends JFrame {
             }
         });
 
+        int[][] array = new int[5][6];
+        System.out.println(array.length);
+
         urlButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < csv.cells.size(); i++) {
-                    try {
-                        fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < csv.cells.size(); i++) {
+                            try {
+                                fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
+                                csv.save(new File("prices.csv"));
+                                Thread.sleep(100L);
+                            } catch (Exception e1) {
+                                failed.add(i);
+                                e1.printStackTrace();
+                            }
+                        }
+                        synchronized (failed) {
+                            for (Integer fail : failed) {
+                                try {
+                                    fetchPrice(csv.get(fail, 0), csv.get(fail, 2), csv.get(fail, 4), fail);
+                                    failed.remove(fail);
+                                    csv.save(new File("prices.csv"));
+                                    Thread.sleep(100L);
+                                } catch (Exception e1) {
+                                    failed.add(fail);
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
                     }
-                    try {
-                        csv.save(new File("prices.csv"));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    try {
-                        Thread.sleep(1000L);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+                }).start();
             }
 
         });
@@ -166,8 +179,6 @@ public class PriceFetcher extends JFrame {
         String PID = cookies.get("D_PID");
         String UID = cookies.get("D_UID");
         String IID = cookies.get("D_IID");
-
-        System.out.println(SID + ", " + PID + ", " + UID + ", " + IID);
 
         connectTo(SID, PID, UID, IID, card, set, rarity, row);
     }
@@ -233,14 +244,14 @@ public class PriceFetcher extends JFrame {
                     }
                 }
                 if (gottenImage) {
-                    runAfterImage(doc, tdElements, numbers, set, rarity, row);
-                    break;
+                    if (runAfterImage(doc, tdElements, numbers, set, rarity, row))
+                        break;
                 }
             }
         }
     }
 
-    private void runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity, int row) throws Exception {
+    private boolean runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity, int row) throws Exception {
         StringBuilder builder = new StringBuilder();
         boolean skip = false;
         for (Element tdElement : tdElements) {
@@ -248,7 +259,7 @@ public class PriceFetcher extends JFrame {
                 String setName = Sets.main().get(set);
                 if (!tdElement.text().equals(setName + (rarity ? " (Foil)" : ""))) {
                     skip = true;
-                    break;
+                    return false;
                 }
             }
             if (tdElement.hasClass("search_results_9") && !skip) {
@@ -275,10 +286,10 @@ public class PriceFetcher extends JFrame {
                 }
             }
         }
-//        System.out.println(builder.toString());
 //        area.append(builder.toString());
         System.out.println(builder.toString());
         csv.set(row, 5, builder.toString());
+        return true;
     }
 
     private int getBackgroundPosition(String css) {
