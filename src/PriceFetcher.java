@@ -29,11 +29,11 @@ public class PriceFetcher extends JFrame {
     private JLabel label;
     private JLabel setLabel;
     private JTextArea area;
-    private CSVIO csv;
+    private CsvIO csv;
 
     public PriceFetcher(JFrame prevGUI) {
         try {
-            csv = new CSVIO(new File("cards.csv"));
+            csv = new CsvIO(new File("cards.csv"));
         } catch (Exception e) {
             e.printStackTrace();
         }

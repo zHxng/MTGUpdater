@@ -5,11 +5,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class CSVIO {
+public class CsvIO {
     public ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>();
     private final File f;
 
-    public CSVIO(File csv) throws Exception {
+    public CsvIO(File csv) throws Exception {
         f = csv;
         BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(csv)));
         String line;
