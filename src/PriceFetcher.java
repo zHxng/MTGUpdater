@@ -116,7 +116,7 @@ public class PriceFetcher extends JFrame {
                             try {
                                 fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
                                 csv.save(new File("prices.csv"));
-                                Thread.sleep(100L);
+                                Thread.sleep(200L);
                             } catch (Exception e1) {
                                 failed.add(i);
                                 e1.printStackTrace();
@@ -128,7 +128,7 @@ public class PriceFetcher extends JFrame {
                                     fetchPrice(csv.get(fail, 0), csv.get(fail, 2), csv.get(fail, 4), fail);
                                     failed.remove(fail);
                                     csv.save(new File("prices.csv"));
-                                    Thread.sleep(100L);
+                                    Thread.sleep(200L);
                                 } catch (Exception e1) {
                                     failed.add(fail);
                                     e1.printStackTrace();
