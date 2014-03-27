@@ -33,7 +33,7 @@ public class PriceFetcher extends JFrame {
 
     public PriceFetcher(JFrame prevGUI) {
         try {
-            csv = new CSVIO(new File("cards.csv"));
+            csv = new CSVIO(new File("cards2.csv"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,9 +103,6 @@ public class PriceFetcher extends JFrame {
             }
         });
 
-        int[][] array = new int[5][6];
-        System.out.println(array.length);
-
         urlButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,27 +111,32 @@ public class PriceFetcher extends JFrame {
                     public void run() {
                         for (int i = 0; i < csv.cells.size(); i++) {
                             try {
-                                fetchPrice(csv.get(i, 0), csv.get(i, 2), csv.get(i, 4), i);
-                                csv.save(new File("prices.csv"));
-                                Thread.sleep(100L);
+                                fetchPrice(csv.get(i, 0).replaceAll("Æ", "AE"), csv.get(i, 2), csv.get(i, 4), i);
+                                System.out.println(i);
+                                csv.save(new File("cards2.csv"));
+                                Thread.sleep(200L);
                             } catch (Exception e1) {
                                 failed.add(i);
                                 e1.printStackTrace();
                             }
                         }
-                        synchronized (failed) {
-                            for (Integer fail : failed) {
-                                try {
-                                    fetchPrice(csv.get(fail, 0), csv.get(fail, 2), csv.get(fail, 4), fail);
-                                    failed.remove(fail);
-                                    csv.save(new File("prices.csv"));
-                                    Thread.sleep(100L);
-                                } catch (Exception e1) {
-                                    failed.add(fail);
-                                    e1.printStackTrace();
-                                }
+                        fixFailed(failed);
+                    }
+
+                    private void fixFailed(ArrayList<Integer> failed) {
+                        ArrayList<Integer> failed2 = new ArrayList<Integer>();
+                        for (Integer fail : failed) {
+                            try {
+                                fetchPrice(csv.get(fail, 0).replaceAll("Æ", "AE"), csv.get(fail, 2), csv.get(fail, 4), fail);
+                                System.out.println(fail);
+                                csv.save(new File("cards2.csv"));
+                            } catch (Exception e1) {
+                                failed2.add(fail);
+                                e1.printStackTrace();
                             }
                         }
+                        if (failed2.size() != 0)
+                            fixFailed(failed2);
                     }
                 }).start();
             }

@@ -66,11 +66,11 @@ LRW Lorwyn
 M10 2010 Core Set
 M11 2011 Core Set
 M12 2012 Core Set
-M13 2013 Core set
-M14 2014 Core set
+M13 2013 Core Set
+M14 2014 Core Set
 MBS Mirrodin Besieged
 MIR Mirage
-MM Modern Masters
+MMA Modern Masters
 MMQ Mercadian Masques
 MOR Morningtide
 MRD Mirrodin
@@ -100,7 +100,7 @@ STH Stronghold
 THS Theros
 TMP Tempest
 TOR Torment
-TSB Time Spiral "Timeshifted"
+TSB Time Spiral
 TSP Time Spiral
 UDS Urza's Destiny
 UGL Unglued
