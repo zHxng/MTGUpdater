@@ -288,6 +288,10 @@ public class PriceFetcher extends JFrame {
                 }
             }
         }
+
+        if (!builder.toString().contains(".")) {
+            throw new Exception("No price received.");
+        }
 //        area.append(builder.toString());
         System.out.println(builder.toString());
         csv.set(row, 5, builder.toString());
