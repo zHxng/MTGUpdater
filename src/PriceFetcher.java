@@ -109,15 +109,20 @@ public class PriceFetcher extends JFrame {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0; i < csv.cells.size(); i++) {
+                        for (int i = 19984; i < csv.cells.size(); i++) {
                             try {
-                                fetchPrice(csv.get(i, 0).replaceAll("Æ", "AE"), csv.get(i, 2), csv.get(i, 4), i);
-                                System.out.println(i);
+                                System.out.println(i + ": " + csv.get(i, 0));
+                                fetchPrice(csv.get(i, 0).replaceAll(",", "%2C"), csv.get(i, 2), csv.get(i, 4), i);
                                 csv.save(new File("cards2.csv"));
                                 Thread.sleep(200L);
                             } catch (Exception e1) {
                                 failed.add(i);
                                 e1.printStackTrace();
+                                try {
+                                    Thread.sleep(200L);
+                                } catch (InterruptedException e2) {
+                                    e2.printStackTrace();
+                                }
                             }
                         }
                         fixFailed(failed);
@@ -127,12 +132,18 @@ public class PriceFetcher extends JFrame {
                         ArrayList<Integer> failed2 = new ArrayList<Integer>();
                         for (Integer fail : failed) {
                             try {
-                                fetchPrice(csv.get(fail, 0).replaceAll("Æ", "AE"), csv.get(fail, 2), csv.get(fail, 4), fail);
-                                System.out.println(fail);
+                                fetchPrice(csv.get(fail, 0).replaceAll(",", "%2C"), csv.get(fail, 2), csv.get(fail, 4), fail);
+                                System.out.println("Fixing failed: " + fail);
                                 csv.save(new File("cards2.csv"));
+                                Thread.sleep(200L);
                             } catch (Exception e1) {
                                 failed2.add(fail);
                                 e1.printStackTrace();
+                                try {
+                                    Thread.sleep(200L);
+                                } catch (InterruptedException e2) {
+                                    e2.printStackTrace();
+                                }
                             }
                         }
                         if (failed2.size() != 0)
