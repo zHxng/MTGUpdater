@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,21 +23,18 @@ import java.util.regex.Pattern;
 public class PriceFetcher extends JFrame {
 
     private final ArrayList<Integer> failed = new ArrayList<Integer>();
+    private final HashMap<String, String> setsMap;
     private JButton back;
     private JButton urlButton;
     private JTextField card;
     private JTextField set;
     private JLabel label;
     private JLabel setLabel;
+    private JButton foil;
     private JTextArea area;
-    private CSVIO csv;
+    private boolean isFoil = false;
 
     public PriceFetcher(JFrame prevGUI) {
-        try {
-            csv = new CSVIO(new File("cards2.csv"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         setVisible(true);
         setSize(300, 500);
         setMinimumSize(new Dimension(300, 500));
@@ -87,9 +85,15 @@ public class PriceFetcher extends JFrame {
         set.setColumns(20);
         add(set, gc);
 
-        area = new JTextArea();
+        foil = new JButton();
         gc.gridx = 0;
         gc.gridy = 3;
+        foil.setText("Normal (Not foil)");
+        add(foil, gc);
+
+        area = new JTextArea();
+        gc.gridx = 0;
+        gc.gridy = 4;
         gc.gridwidth = 100;
         gc.gridheight = 10;
         area.setEditable(false);
@@ -109,58 +113,39 @@ public class PriceFetcher extends JFrame {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 19984; i < csv.cells.size(); i++) {
                             try {
-                                System.out.println(i + ": " + csv.get(i, 0));
-                                fetchPrice(csv.get(i, 0).replaceAll(",", "%2C"), csv.get(i, 2), csv.get(i, 4), i);
-                                csv.save(new File("cards2.csv"));
-                                Thread.sleep(200L);
+                                fetchPrice(card.getText().replaceAll(",", "%2C"), set.getText(), isFoil);
                             } catch (Exception e1) {
-                                failed.add(i);
+                                JOptionPane.showMessageDialog(null, "An Error Occurred! " + e1.getMessage());
                                 e1.printStackTrace();
-                                try {
-                                    Thread.sleep(200L);
-                                } catch (InterruptedException e2) {
-                                    e2.printStackTrace();
-                                }
                             }
-                        }
-                        fixFailed(failed);
-                    }
-
-                    private void fixFailed(ArrayList<Integer> failed) {
-                        ArrayList<Integer> failed2 = new ArrayList<Integer>();
-                        for (Integer fail : failed) {
-                            try {
-                                fetchPrice(csv.get(fail, 0).replaceAll(",", "%2C"), csv.get(fail, 2), csv.get(fail, 4), fail);
-                                System.out.println("Fixing failed: " + fail);
-                                csv.save(new File("cards2.csv"));
-                                Thread.sleep(200L);
-                            } catch (Exception e1) {
-                                failed2.add(fail);
-                                e1.printStackTrace();
-                                try {
-                                    Thread.sleep(200L);
-                                } catch (InterruptedException e2) {
-                                    e2.printStackTrace();
-                                }
-                            }
-                        }
-                        if (failed2.size() != 0)
-                            fixFailed(failed2);
                     }
                 }).start();
             }
 
         });
+
+        foil.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isFoil) {
+                    foil.setText("Foil");
+                    isFoil = true;
+                } else {
+                    foil.setText("Normal (Not foil)");
+                    isFoil = false;
+                }
+            }
+        });
         pack();
+        setsMap = Sets.main();
     }
 
-    private void fetchPrice(String s, String s1, String s2, int row) throws Exception {
-        getCookie(s, s1, s2.equalsIgnoreCase("yes"), row);
+    private void fetchPrice(String s, String s1, boolean foil) throws Exception {
+        getCookie(s, s1, foil);
     }
 
-    private void getCookie(String card, String set, boolean rarity, int row) throws Exception {
+    private void getCookie(String card, String set, boolean foil) throws Exception {
         Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
                 .method(Connection.Method.GET)
                 .header("Accept-Encoding", "gzip,deflate,sdch")
@@ -193,10 +178,10 @@ public class PriceFetcher extends JFrame {
         String UID = cookies.get("D_UID");
         String IID = cookies.get("D_IID");
 
-        connectTo(SID, PID, UID, IID, card, set, rarity, row);
+        connectTo(SID, PID, UID, IID, card, set, foil);
     }
 
-    private void connectTo(String sid, String pid, String uid, String iid, String card, String set, boolean rarity, int row) throws Exception {
+    private void connectTo(String sid, String pid, String uid, String iid, String card, String set, boolean rarity) throws Exception {
 //        System.out.println("http://sales.starcitygames.com/search.php?substring=" + card);
         Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
                 .method(Connection.Method.GET)
@@ -257,19 +242,23 @@ public class PriceFetcher extends JFrame {
                     }
                 }
                 if (gottenImage) {
-                    if (runAfterImage(doc, tdElements, numbers, set, rarity, row))
-                        break;
+                    if (runAfterImage(doc, tdElements, numbers, set, rarity))
+                        return;
                 }
             }
         }
+        throw new Exception("Could not find valid search response!");
     }
 
-    private boolean runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity, int row) throws Exception {
+    private boolean runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity) throws Exception {
         StringBuilder builder = new StringBuilder();
         boolean skip = false;
         for (Element tdElement : tdElements) {
             if (tdElement.hasClass("search_results_2")) {
-                String setName = Sets.main().get(set);
+                String setName = setsMap.get(set);
+                if (setName == null) {
+                    throw new Exception("Set abbreviation could not be found!");
+                }
                 if (!tdElement.text().equals(setName + (rarity ? " (Foil)" : ""))) {
                     skip = true;
                     return false;
@@ -303,9 +292,8 @@ public class PriceFetcher extends JFrame {
         if (!builder.toString().contains(".")) {
             throw new Exception("No price received.");
         }
-//        area.append(builder.toString());
+        area.append(builder.toString() + "\n");
         System.out.println(builder.toString());
-        csv.set(row, 5, builder.toString());
         return true;
     }
 
