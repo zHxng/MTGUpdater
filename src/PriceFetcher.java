@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -308,7 +307,7 @@ public class PriceFetcher extends JFrame {
     }
 
     private int[] getNumbers(BufferedImage image) throws Exception {
-        return Reader.findDigits(ImageIO.read(new File("template.png")), image, 2, 1, 9, 5, 8, 6, 7, 0, 3, 4);
+        return Reader.findDigits(ImageIO.read(PriceFetcher.class.getResourceAsStream("template.png")), image, 2, 1, 9, 5, 8, 6, 7, 0, 3, 4);
     }
 
     private String getCss(Document doc, String clazz) {

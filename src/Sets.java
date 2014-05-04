@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -7,11 +5,7 @@ public class Sets {
 
     public static HashMap<String, String> main() {
         Scanner in = null;
-        try {
-            in = new Scanner(new File("sets.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        in = new Scanner(Sets.class.getResourceAsStream("sets.txt"));
         HashMap<String, String> sets = new HashMap<String, String>();
         assert in != null;
         while (in.hasNext()) {
