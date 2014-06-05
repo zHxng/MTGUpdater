@@ -141,10 +141,23 @@ public class PriceFetcher extends JFrame {
     }
 
     private void fetchPrice(String s, String s1, boolean foil) throws Exception {
-        getCookie(s, s1, foil);
+	    Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
+			    .method(Connection.Method.GET)
+			    .header("Accept-Encoding", "gzip,deflate,sdch")
+			    .header("Connection", "keep-alive")
+			    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+			    .header("Accept-Language", "en-US,en;q=0.8,fr;q=0.6")
+			    .header("Cache-Control", "max-age=0")
+			    .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36")
+			    .execute();
+	    try {
+		    getCookie(s, s1, foil);
+	    } catch (Exception e) {
+		    getCookie2(s, s1, foil);
+	    }
     }
 
-	private void getCookie(String card, String set, boolean foil) throws Exception {
+	private void getCookie2(String card, String set, boolean foil) throws Exception {
 		Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
 				.method(Connection.Method.GET)
 				.header("Accept-Encoding", "gzip,deflate,sdch")
@@ -177,10 +190,10 @@ public class PriceFetcher extends JFrame {
 		String UID = cookies.get("D_UID");
 		String IID = cookies.get("D_IID");
 
-		connectTo(SID, PID, UID, IID, card, set, foil);
+		connectTo2(SID, PID, UID, IID, card, set, foil);
 	}
 
-	private void connectTo(String sid, String pid, String uid, String iid, String card, String set, boolean rarity) throws Exception {
+	private void connectTo2(String sid, String pid, String uid, String iid, String card, String set, boolean rarity) throws Exception {
 //        System.out.println("http://sales.starcitygames.com/search.php?substring=" + card);
 		Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
 				.method(Connection.Method.GET)
@@ -249,6 +262,92 @@ public class PriceFetcher extends JFrame {
 		throw new Exception("Could not find valid search response!");
 	}
 
+    private void getCookie(String card, String set, boolean foil) throws Exception {
+        Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
+                .method(Connection.Method.GET)
+                .header("Accept-Encoding", "gzip,deflate,sdch")
+                .header("Connection", "keep-alive")
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                .header("Accept-Language", "en-US,en;q=0.8,fr;q=0.6")
+                .header("Cache-Control", "max-age=0")
+                .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36")
+                .execute();
+        Map<String, String> cookies = response.cookies();
+        String cid = cookies.get("ci_session");
+        String session = cookies.get("session_track");
+
+        connectTo(session, cid, card, set, foil);
+    }
+
+    private void connectTo(String session, String cid, String card, String set, boolean rarity) throws Exception {
+//        System.out.println("http://sales.starcitygames.com/search.php?substring=" + card);
+        Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
+                .method(Connection.Method.GET)
+                .header("Accept-Encoding", "gzip,deflate,sdch")
+                .header("Connection", "keep-alive")
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                .header("Accept-Language", "en-US,en;q=0.8,fr;q=0.6")
+                .header("Cache-Control", "max-age=0")
+                .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36")
+                .cookie("cisession", cid)
+                .cookie("session_track", session)
+                .execute();
+
+        Document doc = response.parse();
+        Elements trElements = doc.getElementsByTag("tr");
+
+        int[] numbers = null;
+
+	    boolean thing = false;
+	    boolean gottenImage = false;
+        for (Element trElement : trElements) {
+            if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody2_row")) {
+                Elements tdElements = trElement.getElementsByTag("td");
+                for (Element tdElement : tdElements) {
+                    if (tdElement.hasClass("search_results_9")) {
+                        Elements divElements = tdElement.getElementsByTag("div");
+                        for (Element divElement : divElements) {
+                            // Get numbers
+                            if (divElement.classNames().size() == 3) {
+                                if (!gottenImage) {
+                                    BufferedImage image = null;
+                                    for (Object object : divElement.classNames().toArray()) {
+                                        String string = String.valueOf(object);
+                                        String css = getCss(doc, string);
+                                        if (css.contains("//")) {
+                                            URL url = new URL("http://" + css.split("//")[1].replace(");", ""));
+                                            URLConnection con = url.openConnection();
+                                            con.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+                                            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36");
+                                            con.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+                                            con.setRequestProperty("Cookie", "cisession=" + session + ";"
+                                                            + "session_track=" + cid + ";"
+                                            );
+                                            con.setRequestProperty("Referer", response.url().toString());
+                                            InputStream input = con.getInputStream();
+                                            image = ImageIO.read(input);
+                                            gottenImage = true;
+                                        }
+                                    }
+                                    assert image != null;
+                                    numbers = getNumbers(image);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (gottenImage) {
+	                if (thing = runAfterImage(doc, tdElements, numbers, set, rarity, card) || thing)
+                        return;
+                }
+            }
+        }
+	    if (!thing) {
+		    throw new Exception("Card could not be found or no price was received!");
+	    }
+        throw new Exception("Could not find valid search response!");
+    }
+
     private boolean runAfterImage(Document doc, Elements tdElements, int[] numbers, String set, boolean rarity, String card) throws Exception {
         boolean thing = false; // Thing is the thing for the card found
 	    StringBuilder builder = new StringBuilder();
@@ -260,17 +359,19 @@ public class PriceFetcher extends JFrame {
 		        }
 	        }
             if (tdElement.hasClass("search_results_2") && thing) {
+	            System.out.println(tdElement.text());
+	            skip = false;
                 String setName = setsMap.get(set);
                 if (setName == null) {
                     throw new Exception("Set abbreviation could not be found and matched to full set name!");
                 }
                 if (!tdElement.text().equals(setName + (rarity ? " (Foil)" : ""))) {
-                    skip = true;
-                    continue;
+	                skip = true;
+	                thing = false;
                 }
             }
             if (tdElement.hasClass("search_results_9") && !skip && thing) {
-                skip = false;
+	            skip = false;
                 Elements divElements = tdElement.getElementsByTag("div");
                 for (Element divElement : divElements) {
                     // Get numbers
@@ -282,7 +383,8 @@ public class PriceFetcher extends JFrame {
                             if (css.contains("float"))
                                 continue;
                             if (css.contains("width")) {
-                                builder.append(".");
+	                            System.out.println("hello");
+	                            builder.append(".");
                                 continue;
                             }
                             builder.append(getNumber(getBackgroundPosition(css), numbers));
@@ -295,12 +397,13 @@ public class PriceFetcher extends JFrame {
         }
 
 	    if (!thing) {
-		    throw new Exception("Card could not be found!");
+		    return false;
 	    }
 
         if (!builder.toString().contains(".")) {
-            throw new Exception("No price received.");
+	        return false;
         }
+
         area.append(builder.toString() + "\n");
         System.out.println(builder.toString());
         return true;
