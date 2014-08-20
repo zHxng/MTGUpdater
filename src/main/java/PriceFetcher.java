@@ -1,4 +1,5 @@
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +33,11 @@ public class PriceFetcher extends JFrame {
     private JButton foil;
     private JTextArea area;
     private boolean isFoil = false;
+	private String UID;
+	private String IID;
+	private String HID;
+	private String SID;
+	private String PID;
 
     public PriceFetcher(JFrame prevGUI) {
         setVisible(true);
@@ -115,8 +121,17 @@ public class PriceFetcher extends JFrame {
                             try {
                                 fetchPrice(card.getText().replaceAll(",", "%2C"), set.getText(), isFoil);
                             } catch (Exception e1) {
-                                JOptionPane.showMessageDialog(null, "An Error Occurred! " + e1.getMessage());
-                                e1.printStackTrace();
+	                            e1.printStackTrace();
+	                            if (e1 instanceof HttpStatusException) {
+									HttpStatusException exception = (HttpStatusException) e1;
+		                            if (exception.getStatusCode() == 405) {
+			                            System.out.println("error");
+		                            } else {
+			                            JOptionPane.showMessageDialog(null, "An Error Occurred! " + e1.getMessage());
+		                            }
+	                            } else {
+		                            JOptionPane.showMessageDialog(null, "An Error Occurred! " + e1.getMessage());
+	                            }
                             }
                     }
                 }).start();
@@ -140,20 +155,24 @@ public class PriceFetcher extends JFrame {
         setsMap = Sets.main();
     }
 
-    private void fetchPrice(String s, String s1, boolean foil) throws Exception {
-	    Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
-			    .method(Connection.Method.GET)
-			    .header("Accept-Encoding", "gzip,deflate,sdch")
-			    .header("Connection", "keep-alive")
-			    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-			    .header("Accept-Language", "en-US,en;q=0.8,fr;q=0.6")
-			    .header("Cache-Control", "max-age=0")
-			    .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36")
-			    .execute();
-	    try {
-		    getCookie(s, s1, foil);
-	    } catch (Exception e) {
-		    getCookie2(s, s1, foil);
+    private void fetchPrice(String card, String set, boolean foil) throws Exception {
+	    if (SID == null || PID == null || IID == null || HID == null || UID == null) {
+		    Connection.Response response = Jsoup.connect("http://www.starcitygames.com/")
+				    .method(Connection.Method.GET)
+				    .header("Accept-Encoding", "gzip,deflate,sdch")
+				    .header("Connection", "keep-alive")
+				    .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+				    .header("Accept-Language", "en-US,en;q=0.8,fr;q=0.6")
+				    .header("Cache-Control", "max-age=0")
+				    .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36")
+				    .execute();
+		    try {
+			    getCookie(card, set, foil);
+		    } catch (Exception e) {
+			    getCookie2(card, set, foil);
+		    }
+	    } else {
+		    connectTo2(SID, PID, UID, IID, HID, card, set, foil);
 	    }
     }
 
@@ -185,15 +204,16 @@ public class PriceFetcher extends JFrame {
 				.data("p", stuff)
 				.execute();
 		Map<String, String> cookies = finalResponse.cookies();
-		String SID = cookies.get("D_SID");
-		String PID = cookies.get("D_PID");
-		String UID = cookies.get("D_UID");
-		String IID = cookies.get("D_IID");
+		SID = cookies.get("D_SID");
+		PID = cookies.get("D_PID");
+		UID = cookies.get("D_UID");
+		IID = cookies.get("D_IID");
+		HID = cookies.get("D_HID");
 
-		connectTo2(SID, PID, UID, IID, card, set, foil);
+		connectTo2(SID, PID, UID, IID, HID, card, set, foil);
 	}
 
-	private void connectTo2(String sid, String pid, String uid, String iid, String card, String set, boolean rarity) throws Exception {
+	private void connectTo2(String sid, String pid, String uid, String iid, String hid, String card, String set, boolean rarity) throws Exception {
 //        System.out.println("http://sales.starcitygames.com/search.php?substring=" + card);
 		Connection.Response response = Jsoup.connect("http://sales.starcitygames.com/search.php?substring=" + card)
 				.method(Connection.Method.GET)
@@ -207,6 +227,7 @@ public class PriceFetcher extends JFrame {
 				.cookie("D_PID", pid)
 				.cookie("D_UID", uid)
 				.cookie("D_IID", iid)
+				.cookie("D_HID", hid)
 				.execute();
 
 		Document doc = response.parse();
@@ -216,6 +237,9 @@ public class PriceFetcher extends JFrame {
 
 		boolean gottenImage = false;
 		for (Element trElement : trElements) {
+			if (trElement.ownText().contains("We're sorry!")) {
+				throw new Exception("StarCityGames does not have this card!");
+			}
 			if (trElement.hasClass("deckdbbody_row") || trElement.hasClass("deckdbbody2_row")) {
 				Elements tdElements = trElement.getElementsByTag("td");
 				for (Element tdElement : tdElements) {
@@ -239,6 +263,7 @@ public class PriceFetcher extends JFrame {
 															+ "D_PID=" + pid + ";"
 															+ "D_UID=" + uid + ";"
 															+ "D_IID=" + iid + ";"
+															+ "D_HID=" + hid + ";"
 											);
 											con.setRequestProperty("Referer", response.url().toString());
 											InputStream input = con.getInputStream();
@@ -259,6 +284,11 @@ public class PriceFetcher extends JFrame {
 				}
 			}
 		}
+
+		if (doc.getElementsByTag("META").get(0).attr("NAME").equals("ROBOTS")) {
+
+		}
+
 		throw new Exception("Could not find valid search response!");
 	}
 
