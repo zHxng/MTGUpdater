@@ -126,6 +126,7 @@ public class PriceFetcher extends JFrame {
 									HttpStatusException exception = (HttpStatusException) e1;
 		                            if (exception.getStatusCode() == 405) {
 			                            System.out.println("error");
+			                            JOptionPane.showMessageDialog(null, "You have spammed too much. StarCityGames has blocked your ip temporarily.");
 		                            } else {
 			                            JOptionPane.showMessageDialog(null, "An Error Occurred! " + e1.getMessage());
 		                            }
